@@ -1,8 +1,8 @@
-
+require "byebug"
 
 class Card
 
-    attr_reader
+    attr_accessor :face_up
 
     def initialize(face_value)
 
@@ -27,15 +27,24 @@ class Card
     end
 
 
-    def to_s(arg)
-        arg.to_s
+    def to_s
+        
+        return @face_value if @face_up
+        return " "
+
     end
 
 
-    def ==
-        @face_up == true
+    def ==(card2)
+        self.face_value == card2.face_value
     end
 
 
+    def inspect
+
+       return @face_value if @face_up
+       return "_"
+
+    end
 
 end

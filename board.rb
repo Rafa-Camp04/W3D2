@@ -1,52 +1,54 @@
+require "byebug"
 require_relative "card.rb"
 
 class Board
 
     attr_reader :grid
 
-    def initialize(size)
-        @grid = Array.new(size) { Array.new(size) }
+    def initialize
+        @grid = Array.new(4) { Array.new(4) }
     end
 
 
     def populate
-        5.times { @grid << Card.new(("a".."z").to_a.sample) }
+
+        string = "AABBCCDDEEFFGGHH"
+        arr = string.split("")
+        arr = arr.shuffle
+
+        (0...@grid.length).each do |row|
+            (0...@grid.length).each do |col|
+                @grid[row][col] = Card.new(arr.pop)
+            end
+        end
+
+        self.render
     end
 
 
     def render 
-        p self.grid
+        self.grid.each do |row|
+            p row
+            puts
+        end
     end
 
 
     def won?
-        return false if @grid.any? { |card| !card.== }
+        self.grid.each do |subarr|
+            return true if subarr.all? { |card| card.face_up == true}
+        end
+    
+        false
     end
 
 
     def reveal(guessed_pos)
-
+        
         row, col = guessed_pos
 
-        if !self.== 
-            self.grid[row][col].reveal
-            return self.grid[row][col].value
-        end
-
-    end
-
-
-    def guessed_pos
-
-        arr = []
-
-        p "Please enter the position of the card you'd like to flip (e.g., '2,3')"
-        
-        gets.chomp.each do |ele|
-            arr << ele if ele.class == Integer
-        end
-
-        arr
+        self.grid[row][col].reveal
+        self.render
     end
 
 
@@ -66,7 +68,5 @@ class Board
         self.grid[row][col] = value
 
     end
-
-
 
 end
